@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
+
+    private static Scanner reader = new Scanner(System.in);
+    
     public static void main(String[] args) {
-        Scanner reader = new Scanner(System.in);
         String[] sellers = new String[0], buyers = new String[0];
         int sCount = 0, bCount = 0, input;
         String seller, buyer;
@@ -122,7 +124,6 @@ public class Main {
     }
 
     private static String chooseBuyer(String[] buyers) {
-        Scanner reader = new Scanner(System.in);
         System.out.println("Please enter the name of the buyer: ");
         String buyer;
         do {
@@ -134,7 +135,6 @@ public class Main {
                 System.out.println("This buyer is not in the list, please choose another: ");
             }
         } while (true);
-        reader.close();
         return buyer;
     }
 
