@@ -15,8 +15,6 @@ public class Main {
         int input;
 
         do {
-            System.out.println("Buyers list size: " + buyers.length + ", Buyers: " + bCount);
-            System.out.println("Sellers list size: " + sellers.length + ", Sellers: " + sCount);
             System.out.println("""
                     Choose one of the following options:
                     0: Exit
