@@ -15,6 +15,8 @@ public class Main {
         int input;
 
         do {
+            System.out.println("Buyers list size: " + buyers.length + ", Buyers: " + bCount);
+            System.out.println("Sellers list size: " + sellers.length + ", Sellers: " + sCount);
             System.out.println("""
                     Choose one of the following options:
                     0: Exit
@@ -25,7 +27,6 @@ public class Main {
                     5: Order payment for buyer
                     6: Show details of all buyers
                     7: Show details of all sellers
-
                     """);
             input = reader.nextInt();
             switch (input) {
@@ -118,7 +119,7 @@ public class Main {
         if (count == 0) {
             ls = Arrays.copyOf(ls, 1);
         }
-        else {
+        else if (count == ls.length){
             ls = Arrays.copyOf(ls, ls.length * 2);
         }
         ls[count] = item;
@@ -127,7 +128,7 @@ public class Main {
 
     private static boolean inList(String[] ls, String item) {
         for (String l : ls) {
-            if (l.equals(item)) {
+            if (l != null && l.equals(item)) {
                 return true;
             }
         }
@@ -147,7 +148,6 @@ public class Main {
                 System.out.println("This seller is not in the list, please choose another: ");
             }
         } while (true);
-        reader.close();
         return seller;
     }
 
