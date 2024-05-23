@@ -63,12 +63,12 @@ public class Main {
     }
 
     private static void addProductBuyer() {
-        String buyer = chooseBuyer(buyers);
-        String seller = chooseSeller(sellers);
+        String buyer = chooseBuyer();
+        String seller = chooseSeller();
     }
 
     private static void orderPayment() {
-        String buyer = chooseBuyer(buyers);
+        String buyer = chooseBuyer();
     }
 
     private static String[] addSeller() {
@@ -103,7 +103,7 @@ public class Main {
     }
 
     private static void addProductSeller() {
-        String seller = chooseSeller(sellers);
+        String seller = chooseSeller();
         System.out.println("Please enter the name of the product: ");
         String product = reader.next();
         System.out.println("Please enter the price of the product: ");
@@ -119,27 +119,27 @@ public class Main {
 
     }
 
-    private static String[] addToList(String[] ls, String item, int count) {
+    private static String[] addToList(String[] ls, String name, int count) {
         if (count == 0) {
             ls = Arrays.copyOf(ls, 1);
         }
         else if (count == ls.length){
             ls = Arrays.copyOf(ls, ls.length * 2);
         }
-        ls[count] = item;
+        ls[count] = name;
         return ls;
     }
 
-    private static boolean inList(String[] ls, String item) {
+    private static boolean inList(String[] ls, String name) {
         for (String l : ls) {
-            if (l != null && l.equals(item)) {
+            if (l != null && l.equals(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static String chooseSeller(String[] sellers) {
+    private static String chooseSeller() {
         Scanner reader = new Scanner(System.in);
         System.out.println("Please enter the name of the seller: ");
         String seller;
@@ -155,7 +155,7 @@ public class Main {
         return seller;
     }
 
-    private static String chooseBuyer(String[] buyers) {
+    private static String chooseBuyer() {
         System.out.println("Please enter the name of the buyer: ");
         String buyer;
         do {
