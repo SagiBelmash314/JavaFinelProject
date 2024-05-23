@@ -5,14 +5,20 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static Scanner reader = new Scanner(System.in);
+    private static Scanner reader;
+    private static int sCount;
+    private static int bCount;
+    private static String[] sellers;
+    private static String[] buyers;
 
     public static void main(String[] args) {
-        String[] sellers = new String[0];
-        String[] buyers = new String[0];
-        int sCount = 0;
-        int bCount = 0;
+        sellers = new String[0];
+        buyers = new String[0];
+        sCount = 0;
+        bCount = 0;
         int input;
+
+        reader = new Scanner(System.in);
 
         do {
             System.out.println("""
@@ -29,21 +35,21 @@ public class Main {
             input = reader.nextInt();
             switch (input) {
                 case 1: // Add seller
-                    sellers = addSeller(sellers, sCount);
+                    sellers = addSeller();
                     sCount++;
                     break;
                 case 2: // Add buyer
-                    buyers = addBuyer(buyers, bCount);
+                    buyers = addBuyer();
                     bCount++;
                     break;
                 case 3: // Add product to seller
-                    addProductSeller(sellers);
+                    addProductSeller();
                     break;
                 case 4: // Add product to buyer
-                    addProductBuyer(buyers, sellers);
+                    addProductBuyer();
                     break;
                 case 5: // Order payment for buyer
-                    orderPayment(buyers);
+                    orderPayment();
                     break;
                 case 6: // Show details of all buyers
                     printDetails(buyers);
@@ -56,16 +62,16 @@ public class Main {
         reader.close();
     }
 
-    private static void addProductBuyer(String[] buyers, String[] sellers) {
+    private static void addProductBuyer() {
         String buyer = chooseBuyer(buyers);
         String seller = chooseSeller(sellers);
     }
 
-    private static void orderPayment(String[] buyers) {
+    private static void orderPayment() {
         String buyer = chooseBuyer(buyers);
     }
 
-    private static String[] addSeller(String[] sellers, int sCount) {
+    private static String[] addSeller() {
         System.out.println("Please enter the name of the seller: ");
         do {
             String sName = reader.next();
@@ -80,7 +86,7 @@ public class Main {
         return sellers;
     }
 
-    private static String[] addBuyer(String[] buyers, int bCount) {
+    private static String[] addBuyer() {
         System.out.println("Please enter the name of the buyer: ");
         do {
             String bName = reader.next();
@@ -96,7 +102,7 @@ public class Main {
         return buyers;
     }
 
-    private static void addProductSeller(String[] sellers) {
+    private static void addProductSeller() {
         String seller = chooseSeller(sellers);
         System.out.println("Please enter the name of the product: ");
         String product = reader.next();
