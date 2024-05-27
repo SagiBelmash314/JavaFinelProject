@@ -11,14 +11,22 @@ public class Main {
     private static String[] sellers;
     private static String[] buyers;
 
+
     public static void main(String[] args) {
+        run();
+    }
+
+    public static void run() {
         sellers = new String[0];
         buyers = new String[0];
         sCount = 0;
         bCount = 0;
-        int input;
-
         reader = new Scanner(System.in);
+
+        menu();
+    }
+    public static void menu() {
+        int input;
 
         do {
             System.out.println("""
