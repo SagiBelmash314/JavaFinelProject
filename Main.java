@@ -29,6 +29,7 @@ public class Main {
         int input;
 
         do {
+            System.out.println();
             System.out.println("""
                     Choose one of the following options:
                     0: Exit
@@ -65,6 +66,8 @@ public class Main {
                 case 7: // Show details of all sellers
                     printDetails(sellers);
                     break;
+                default:
+                    System.out.println("Invalid option, please try again");
             }
         } while (input != 0);
         reader.close();
