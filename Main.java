@@ -1,4 +1,6 @@
-// Sagi Belmash and Yair Vinshststocks
+// Sagi Belmash 324227271
+// Yair Vinshststocks 214616781
+// Instructor: Pini Shlomi
 
 import java.util.Arrays;
 import java.util.Scanner;
