@@ -45,12 +45,14 @@ public class Main {
                     """);
             input = reader.nextInt();
             switch (input) {
+                case 0:
+                    break;
                 case 1: // Add seller
-                    sellers = addSeller();
+                    addSeller();
                     sCount++;
                     break;
                 case 2: // Add buyer
-                    buyers = addBuyer();
+                    addBuyer();
                     bCount++;
                     break;
                 case 3: // Add product to seller
@@ -63,13 +65,14 @@ public class Main {
                     orderPayment();
                     break;
                 case 6: // Show details of all buyers
-                    printDetails(buyers);
+                    printDetails(buyers, bCount);
                     break;
                 case 7: // Show details of all sellers
-                    printDetails(sellers);
+                    printDetails(sellers, sCount);
                     break;
                 default:
                     System.out.println("Invalid option, please try again");
+                    break;
             }
         } while (input != 0);
         reader.close();
@@ -84,39 +87,45 @@ public class Main {
         String buyer = chooseBuyer();
     }
 
-    private static String[] addSeller() {
+    private static void addSeller() {
         System.out.println("Please enter the name of the seller: ");
         do {
             String sName = reader.next();
-            if (!inList(sellers, sName)) {
+            if (sName.equals(".")) {
+                return;
+            }
+            if (inList(sellers, sName) || inList(buyers, sName)) {
+                System.out.println("Name is already in the system, please enter another seller or enter \".\" to cancel:");
+            }
+            else {
                 sellers = addToList(sellers, sName, sCount);
                 break;
             }
-            else {
-                System.out.println("Seller is already in the list, please enter another seller: ");
-            }
         } while (true);
-        return sellers;
     }
 
-    private static String[] addBuyer() {
+    private static void addBuyer() {
         System.out.println("Please enter the name of the buyer: ");
         do {
             String bName = reader.next();
-            if (inList(buyers, bName)) {
-                System.out.println("Buyer is already in the list, please enter another buyer: ");
+            if (bName.equals(".")) {
+                return;
+            }
+            else if (inList(sellers, bName) || inList(buyers, bName)) {
+                System.out.println("Name is already in the system, please enter another buyer or enter \".\" to cancel:");
             }
             else {
                 buyers = addToList(buyers, bName, bCount);
-                bCount++;
                 break;
             }
         } while (true);
-        return buyers;
     }
 
     private static void addProductSeller() {
         String seller = chooseSeller();
+        if (seller.equals(".")) {
+            return;
+        }
         System.out.println("Please enter the name of the product: ");
         String product = reader.next();
         System.out.println("Please enter the price of the product: ");
@@ -125,9 +134,9 @@ public class Main {
         String category = reader.next();
     }
 
-    private static void printDetails(String[] ls) {
-        for (String i: ls) {
-            System.out.println(i);
+    private static void printDetails(String[] ls, int count) {
+        for (int i = 0; i < count; i++) {
+            System.out.println(ls[i]);
         }
 
     }
@@ -162,7 +171,7 @@ public class Main {
                 break;
             }
             else {
-                System.out.println("This seller is not in the list, please choose another: ");
+                System.out.println("This seller is not in the list, please choose another or enter \".\" to cancel:");
             }
         } while (true);
         return seller;
@@ -177,7 +186,7 @@ public class Main {
                 break;
             }
             else {
-                System.out.println("This buyer is not in the list, please choose another: ");
+                System.out.println("This buyer is not in the list, please choose another or enter \".\" to cancel:");
             }
         } while (true);
         return buyer;
