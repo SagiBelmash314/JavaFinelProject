@@ -8,10 +8,7 @@ import java.util.Scanner;
 public class Main {
 
     private static Scanner reader;
-    private static int sCount;
-    private static int bCount;
-    private static String[] sellers;
-    private static String[] buyers;
+    private static Manager manager;
 
 
     public static void main(String[] args) {
@@ -19,11 +16,8 @@ public class Main {
     }
 
     public static void run() {
-        sellers = new String[0];
-        buyers = new String[0];
-        sCount = 0;
-        bCount = 0;
         reader = new Scanner(System.in);
+        manager = new Manager();
 
         menu();
     }
@@ -46,15 +40,13 @@ public class Main {
             input = reader.nextInt();
             switch (input) {
                 case 1: // Add seller
-                    sellers = addSeller();
-                    sCount++;
+                    addSeller();
                     break;
                 case 2: // Add buyer
-                    buyers = addBuyer();
-                    bCount++;
+                    addBuyer();
                     break;
                 case 3: // Add product to seller
-                    addProductSeller();
+                    addProductToSeller();
                     break;
                 case 4: // Add product to buyer
                     addProductBuyer();
@@ -63,10 +55,10 @@ public class Main {
                     orderPayment();
                     break;
                 case 6: // Show details of all buyers
-                    printDetails(buyers);
+                    printBuyers();
                     break;
                 case 7: // Show details of all sellers
-                    printDetails(sellers);
+                    printSellers();
                     break;
                 default:
                     System.out.println("Invalid option, please try again");
@@ -75,112 +67,128 @@ public class Main {
         reader.close();
     }
 
+    private static void addSeller() {
+        System.out.println("Please enter the name of the seller or enter \".\" to return to the main menu: ");
+        String name;
+        do {
+            name = reader.next();
+            if (name.equals(".")) {
+                return;
+            }
+            if (!manager.isExisting(name)) {
+                break;
+            }
+            System.out.println("Seller is already in the system.\n" +
+                    "Please enter a different seller or enter \".\" to return to the main menu:");
+        } while (true);
+        System.out.println("Please enter a password: ");
+        String password = reader.next();
+        manager.addSeller(new Seller(name, password));
+        System.out.println(name + " got added to the system as a seller.");
+    }
+
+    private static void addBuyer() {
+        System.out.println("Please enter the name of the buyer or enter \".\" to return to the main menu: ");
+        String name;
+        do {
+            name = reader.next();
+            if (name.equals(".")) {
+                return;
+            }
+            if (!manager.isExisting(name)) {
+                break;
+            }
+            System.out.println("Buyer is already in the system.\n" +
+                    "Please enter a different buyer or enter \".\" to return to the main menu:");
+        } while (true);
+        System.out.println("Please enter a password: ");
+        String password = reader.next();
+        System.out.println("Please enter an address: ");
+        String address = reader.next();
+        manager.addBuyer(new Buyer(name, password, address));
+        System.out.println(name + " got added to the system as a buyer.");
+    }
+
+    private static void addProductToSeller() {
+        Seller seller = chooseSeller();
+        System.out.println("Please enter the name of the product: ");
+        String productName = reader.next();
+        System.out.println("Please enter the price of the product: ");
+        float price = reader.nextFloat();
+        seller.addProduct(new Product(productName, price));
+    }
+
     private static void addProductBuyer() {
-        String buyer = chooseBuyer();
-        String seller = chooseSeller();
+        Buyer buyer = chooseBuyer();
+        Seller seller = chooseSeller();
+        seller.printProducts();
+        System.out.println("Choose one of the products:");
+        String productName;
+        do {
+            productName = reader.next();
+            if (productName.equals(".")) {
+                return;
+            }
+            if (chooseProduct(seller, productName)) {
+                break;
+            }
+            System.out.println("You chose a product that this seller does not offer.\n" +
+                    "Please choose another or enter \".\" to return to the main menu.");
+        } while (true);
+        buyer.addItemToCart(seller.getProductByName(productName));
+        System.out.println("The item was added to the buyer's cart.");
     }
 
     private static void orderPayment() {
-        String buyer = chooseBuyer();
+        Buyer buyer = chooseBuyer();
+        buyer.checkout();
     }
 
-    private static String[] addSeller() {
+    private static void printBuyers() {
+        manager.printBuyers();
+    }
+
+    private static void printSellers() {
+        manager.printSellers();
+    }
+
+    private static Seller chooseSeller() {
         System.out.println("Please enter the name of the seller: ");
+        String name;
         do {
-            String sName = reader.next();
-            if (!inList(sellers, sName)) {
-                sellers = addToList(sellers, sName, sCount);
+            name = reader.next();
+            if (manager.sellerExits(name)) {
                 break;
             }
             else {
-                System.out.println("Seller is already in the list, please enter another seller: ");
+                System.out.println("This seller doesn't exist, please choose another: ");
             }
         } while (true);
-        return sellers;
+        return manager.getSeller(name);
     }
 
-    private static String[] addBuyer() {
+    private static Buyer chooseBuyer() {
         System.out.println("Please enter the name of the buyer: ");
+        String name;
         do {
-            String bName = reader.next();
-            if (inList(buyers, bName)) {
-                System.out.println("Buyer is already in the list, please enter another buyer: ");
-            }
-            else {
-                buyers = addToList(buyers, bName, bCount);
-                bCount++;
+            name = reader.next();
+            if (manager.buyerExists(name)) {
                 break;
             }
+            else {
+                System.out.println("This buyer doesn't exist, please choose another: ");
+            }
         } while (true);
-        return buyers;
+        return manager.getBuyer(name);
     }
 
-    private static void addProductSeller() {
-        String seller = chooseSeller();
-        System.out.println("Please enter the name of the product: ");
-        String product = reader.next();
-        System.out.println("Please enter the price of the product: ");
-        float price = reader.nextFloat();
-        System.out.println("Please enter the category of the product: ");
-        String category = reader.next();
-    }
-
-    private static void printDetails(String[] ls) {
-        for (String i: ls) {
-            System.out.println(i);
-        }
-
-    }
-
-    private static String[] addToList(String[] ls, String name, int count) {
-        if (count == 0) {
-            ls = Arrays.copyOf(ls, 1);
-        }
-        else if (count == ls.length){
-            ls = Arrays.copyOf(ls, ls.length * 2);
-        }
-        ls[count] = name;
-        return ls;
-    }
-
-    private static boolean inList(String[] ls, String name) {
-        for (String l : ls) {
-            if (l != null && l.equals(name)) {
+    private static boolean chooseProduct(Seller seller, String productName) {
+        for (Product p : seller.getProducts()) {
+            if (p.getName().equals(productName)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private static String chooseSeller() {
-        Scanner reader = new Scanner(System.in);
-        System.out.println("Please enter the name of the seller: ");
-        String seller;
-        do {
-            seller = reader.next();
-            if (inList(sellers, seller)) {
-                break;
-            }
-            else {
-                System.out.println("This seller is not in the list, please choose another: ");
-            }
-        } while (true);
-        return seller;
-    }
-
-    private static String chooseBuyer() {
-        System.out.println("Please enter the name of the buyer: ");
-        String buyer;
-        do {
-            buyer = reader.next();
-            if (inList(buyers, buyer)) {
-                break;
-            }
-            else {
-                System.out.println("This buyer is not in the list, please choose another: ");
-            }
-        } while (true);
-        return buyer;
     }
 
 }
