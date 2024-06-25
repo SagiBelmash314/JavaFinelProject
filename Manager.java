@@ -13,7 +13,7 @@ public class Manager {
         numOfBuyers = 0;
     }
     
-    public boolean sellerExits(String name) {
+    public boolean sellerExists(String name) {
         for (int i = 0; i < numOfSellers; i++) {
             if (sellers[i].getName().equals(name)) {
                 return true;
@@ -32,7 +32,7 @@ public class Manager {
     }
 
     public boolean isExisting(String name) {
-        return (sellerExits(name) || buyerExists(name));
+        return (sellerExists(name) || buyerExists(name));
     }
 
     public void addSeller(Seller seller) {

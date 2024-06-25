@@ -3,13 +3,12 @@ import java.util.Arrays;
 public class Buyer {
     private final String name;
     private final String password;
-    private final String address ;
+    private final Address address ;
     private ShoppingCart shoppingCart;
     private ShoppingCart[] orders;
     private int numOfOrders;
 
-    public Buyer(String name, String password, String address)
-    {
+    public Buyer(String name, String password, Address address) {
         this.name = name;
         this.password = password;
         this.address = address;
@@ -18,24 +17,12 @@ public class Buyer {
         this.numOfOrders = 0;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public String getPassword()
-    {
-        return password;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void printItems(){
-        for (int i = 1; i < shoppingCart.getProducts().length + 1; i++) {
-            System.out.println(i + ") " + shoppingCart.getProducts()[i]);
-        }
+    public Address getAddress() {
+        return new Address(address);
     }
 
     public void addItemToCart(Product product){

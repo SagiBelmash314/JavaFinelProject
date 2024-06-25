@@ -16,7 +16,7 @@ public class Product {
         return name;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 

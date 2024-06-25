@@ -2,7 +2,6 @@
 // Yair Vinshststocks 214616781
 // Instructor: Pini Shlomi
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -13,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         run();
+        reader.close();
     }
 
     public static void run() {
@@ -39,6 +39,9 @@ public class Main {
                     """);
             input = reader.nextInt();
             switch (input) {
+                case 0:
+                    System.out.println("Goodbye!");
+                    break;
                 case 1: // Add seller
                     addSeller();
                     break;
@@ -64,7 +67,6 @@ public class Main {
                     System.out.println("Invalid option, please try again");
             }
         } while (input != 0);
-        reader.close();
     }
 
     private static void addSeller() {
@@ -103,9 +105,15 @@ public class Main {
         } while (true);
         System.out.println("Please enter a password: ");
         String password = reader.next();
-        System.out.println("Please enter an address: ");
-        String address = reader.next();
-        manager.addBuyer(new Buyer(name, password, address));
+        System.out.println("Please enter buyer's street name: ");
+        String street = reader.next();
+        System.out.println("Please enter buyer's building number: ");
+        int building = reader.nextInt();
+        System.out.println("Please enter buyer's city: ");
+        String city = reader.next();
+        System.out.println("Please enter buyer's country: ");
+        String country = reader.next();
+        manager.addBuyer(new Buyer(name, password, new Address(street, building, city, country)));
         System.out.println(name + " got added to the system as a buyer.");
     }
 
@@ -157,7 +165,7 @@ public class Main {
         String name;
         do {
             name = reader.next();
-            if (manager.sellerExits(name)) {
+            if (manager.sellerExists(name)) {
                 break;
             }
             else {

@@ -1,12 +1,12 @@
-import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 
 public class ShoppingCart {
     private Product[] products;
     private int numOfProducts;
-    private String date;
+    private Date date;
     private float totalPrice;
-    private Buyer buyer;
+    private final Buyer buyer;
 
     public ShoppingCart(Buyer buyer) {
         products = new Product[0];
@@ -31,7 +31,7 @@ public class ShoppingCart {
     }
 
     public void setDate() {
-        date = LocalDate.now().toString();
+        date = new Date();
     }
 
     public Product[] getProducts() {
