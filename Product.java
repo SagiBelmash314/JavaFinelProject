@@ -4,12 +4,14 @@ public class Product {
     private final int serialNum;
     private static int numOfProducts = 0;
     private final Category category;
+    private final float packagePrice;
 
-    public Product(String name, float price, Category category) {
+    public Product(String name, float price, Category category, float packagePrice) {
         this.name = name;
         this.price = price;
         this.serialNum = numOfProducts++;
         this.category = category;
+        this.packagePrice = packagePrice;
     }
 
     public Product(Product other) {
@@ -17,6 +19,7 @@ public class Product {
         this.price = other.price;
         this.serialNum = other.serialNum;
         this.category = other.category;
+        this.packagePrice = other.packagePrice;
     }
 
     public String getName() {
@@ -38,6 +41,9 @@ public class Product {
         StringBuilder sb = new StringBuilder(name);
         sb.append(" (").append(category).append(") [")
                 .append(serialNum).append("] ---> ").append(price).append(" ILS");
+        if (packagePrice != 0) {
+            sb.append(". This product's package cost ").append(packagePrice).append(" ILS. Total is ").append(price + packagePrice).append(" ILS");
+        }
         return sb.toString();
     }
 }

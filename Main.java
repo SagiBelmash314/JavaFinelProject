@@ -134,9 +134,10 @@ public class Main {
         System.out.println("Please enter the price of the product: ");
         float price = reader.nextFloat();
         Category category = selectCategory();
-        System.out.println("Do you want to add a special packaging?");
+        System.out.println("Please enter the price of the package (if there is no special package enter 0):");
+        float packagePrice = reader.nextFloat();
 
-        seller.addProduct(new Product(productName, price, category));
+        seller.addProduct(new Product(productName, price, category, packagePrice));
 
     }
 
