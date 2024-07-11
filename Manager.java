@@ -124,5 +124,8 @@ public class Manager {
         return products;
     }
 
-
+    public void sort() {
+        Arrays.sort(sellers);
+        Arrays.sort(buyers);
+    }
 }

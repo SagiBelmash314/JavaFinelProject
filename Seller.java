@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Seller {
+public class Seller implements Comparable<Seller> {
     private final String name;
     private final String password;
     private Product[] products;
@@ -48,6 +48,11 @@ public class Seller {
             System.out.println(i + ") " + products[i - 1]);
         }
         System.out.println();
+    }
+
+    @Override
+    public int compareTo(Seller o) {
+        return -Integer.compare(numOfProducts, o.numOfProducts);
     }
 
     @Override

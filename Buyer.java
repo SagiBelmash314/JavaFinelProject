@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Buyer {
+public class Buyer implements Comparable<Buyer> {
     private final String name;
     private final String password;
     private final Address address ;
@@ -25,6 +25,10 @@ public class Buyer {
         return new Address(address);
     }
 
+    public ShoppingCart getShoppingCart() {
+        return new ShoppingCart(shoppingCart);
+    }
+
     public void addItemToCart(Product product){
         shoppingCart.addProduct(product);
     }
@@ -37,7 +41,7 @@ public class Buyer {
         shoppingCart = new ShoppingCart(this);
     }
 
-    public void expandList(){
+    public void expandList() {
         if (orders.length == 0) {
             orders = new ShoppingCart[1];
         } else if (orders.length == numOfOrders) {
@@ -45,8 +49,29 @@ public class Buyer {
         }
     }
 
+    public int printOrderHistory() {
+        for (int i = 0; i < numOfOrders; i++) {
+            System.out.println((i + 1) + ":\n" + orders[i]);
+            System.out.println();
+        }
+        return numOfOrders;
+    }
+
+    public ShoppingCart getPrevOrder(int orderNum) {
+        return new ShoppingCart(orders[orderNum]);
+    }
+
+    public void setCart(ShoppingCart shoppingCart) {
+        this.shoppingCart = shoppingCart;
+    }
+
     @Override
-     public String toString(){
+    public int compareTo(Buyer o) {
+        return name.compareTo(o.name);
+    }
+
+    @Override
+     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Name: ").append(name).append("\n")
                 .append("Address: ").append(address).append("\n")

@@ -27,7 +27,7 @@ public class Product {
     }
 
     public float getPrice() {
-        return price;
+        return price + packagePrice;
     }
 
     public int getSerialNum() {return serialNum;}

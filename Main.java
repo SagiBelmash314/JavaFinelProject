@@ -21,6 +21,16 @@ public class Main {
         reader = new Scanner(System.in);
         manager = new Manager();
 
+//        TESTING
+        manager.addBuyer(new Buyer("Bob", "123", new Address("Here", 1, "There", "Somewhere")));
+        manager.addSeller(new Seller("Sagi", "123"));
+        manager.addSeller(new Seller("Yair", "123"));
+        manager.getSeller("Sagi").addProduct(new Product("Soap", 10, Category.ELECTRIC, 25));
+        manager.getSeller("Yair").addProduct(new Product("Shampoo", 5, Category.CHILD, 0));
+        manager.getBuyer("Bob").addItemToCart(manager.getSeller("Sagi").getProductByName("Soap"));
+
+//        END OF TESTING
+
         menu();
     }
     public static void menu() {
@@ -39,6 +49,7 @@ public class Main {
                     6: Show details of all buyers
                     7: Show details of all sellers
                     8: Show every product of a specific category
+                    9: Create new cart for buyer from previous cart
                     """);
             input = reader.nextInt();
             switch (input) {
@@ -68,6 +79,9 @@ public class Main {
                     break;
                 case 8:
                     printByCategory();
+                    break;
+                case 9:
+                    createCartFromHistory();
                     break;
                 default:
                     System.out.println("Invalid option, please try again");
@@ -121,6 +135,7 @@ public class Main {
         String country = reader.next();
         manager.addBuyer(new Buyer(name, password, new Address(street, building, city, country)));
         System.out.println(name + " got added to the system as a buyer.");
+        manager.sort();
     }
 
     private static void addProductToSeller() {
@@ -138,7 +153,7 @@ public class Main {
         float packagePrice = reader.nextFloat();
 
         seller.addProduct(new Product(productName, price, category, packagePrice));
-
+        manager.sort();
     }
 
 
@@ -146,7 +161,7 @@ public class Main {
         Buyer buyer = chooseBuyer();
         Seller seller = chooseSeller();
         seller.printProducts();
-        System.out.println("Choose one of the products:");
+        System.out.println("Please enter the name of the desired product:");
         String productName;
         do {
             productName = reader.next();
@@ -233,6 +248,30 @@ public class Main {
         for (int i = 1; i < products.length + 1; i++) {
             System.out.println(i + ") " + products[i - 1].getName());
         }
+    }
+
+    private static void createCartFromHistory() {
+        Buyer buyer = chooseBuyer();
+        if (!buyer.getShoppingCart().isEmpty()) {
+            System.out.println("The selected buyer already has a cart, do you wish to replace it with a previous order? (Y/N)");
+            String answer = reader.next();
+            while (!answer.equals("Y") && !answer.equals("N")) {
+                System.out.println("Please enter \"Y\" or \"N\":");
+                answer = reader.next();
+            }
+            if (answer.equals("N")) { return; }
+        }
+        int numOfOrders = buyer.printOrderHistory();
+        System.out.println("Please select an order to be the buyer's new cart, if you wish to cancel enter \"0\":");
+        int orderNum = reader.nextInt();
+        if (orderNum == 0) { return; }
+        while (orderNum < 1 || orderNum > numOfOrders) {
+            System.out.println("This option is not available, please choose from the option above:");
+            orderNum = reader.nextInt();
+            if (orderNum == 0) { return; }
+        }
+        buyer.setCart(buyer.getPrevOrder(orderNum - 1));
+        System.out.println("Buyer's cart has been updated");
     }
 }
 

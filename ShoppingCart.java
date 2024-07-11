@@ -15,6 +15,13 @@ public class ShoppingCart {
         this.buyer = buyer;
     }
 
+    public ShoppingCart(ShoppingCart other) {
+        products = other.products;
+        numOfProducts = other.numOfProducts;
+        totalPrice = other.totalPrice;
+        buyer = other.buyer;
+    }
+
     public void addProduct(Product product) {
         expandList();
         products[numOfProducts++] = product;
@@ -37,6 +44,8 @@ public class ShoppingCart {
     public Product[] getProducts() {
         return Arrays.copyOf(products, numOfProducts);
     }
+
+    public boolean isEmpty() { return numOfProducts == 0; }
 
     public float getTotal() {
         return totalPrice;
