@@ -145,7 +145,7 @@ public class Main {
         Buyer buyer = chooseBuyer();
         Seller seller = chooseSeller();
         seller.printProducts();
-        System.out.println("Choose one of the products:");
+        System.out.println("Please enter the name of the desired product:");
         String productName;
         do {
             productName = reader.next();
