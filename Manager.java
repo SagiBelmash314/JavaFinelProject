@@ -1,10 +1,10 @@
 import java.util.Arrays;
 
 public class Manager {
-    Seller[] sellers;
-    int numOfSellers;
-    Buyer[] buyers;
-    int numOfBuyers;
+    private Seller[] sellers;
+    private int numOfSellers;
+    private Buyer[] buyers;
+    private int numOfBuyers;
 
     public Manager() {
         sellers = new Seller[0];
@@ -25,6 +25,15 @@ public class Manager {
     public boolean buyerExists(String name) {
         for (int i = 0; i < numOfBuyers; i++) {
             if (buyers[i].getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean productExists(Seller seller, String productName) {
+        for (Product p : seller.getProducts()) {
+            if (p.getName().equals(productName)) {
                 return true;
             }
         }
@@ -92,4 +101,28 @@ public class Manager {
             buyers = Arrays.copyOf(buyers, buyers.length * 2);
         }
     }
+
+    public Product[] getItemsByCategory(Category c) {
+        Product[] products = new Product[0];
+        int count = 0;
+        for (int i = 0; i < numOfSellers; i++) {
+            if (sellers[i] != null) {
+                for (int j = 0; j < sellers[i].getProducts().length; j++) {
+                    Product p = sellers[i].getProducts()[j];
+                    if (c.equals(p.getCategory())) {
+                        if (products.length == 0) {
+                            products = new Product[1];
+                        }
+                        else if (products.length == count) {
+                            products = Arrays.copyOf(products, products.length * 2);
+                        }
+                        products[count++] = p;
+                    }
+                }
+            }
+        }
+        return products;
+    }
+
+
 }

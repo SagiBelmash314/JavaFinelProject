@@ -10,6 +10,8 @@ public class Main {
     private static Manager manager;
 
 
+
+
     public static void main(String[] args) {
         run();
         reader.close();
@@ -36,6 +38,7 @@ public class Main {
                     5: Order payment for buyer
                     6: Show details of all buyers
                     7: Show details of all sellers
+                    8: Show every product of a specific category
                     """);
             input = reader.nextInt();
             switch (input) {
@@ -62,6 +65,9 @@ public class Main {
                     break;
                 case 7: // Show details of all sellers
                     printSellers();
+                    break;
+                case 8:
+                    printByCategory();
                     break;
                 default:
                     System.out.println("Invalid option, please try again");
@@ -121,10 +127,20 @@ public class Main {
         Seller seller = chooseSeller();
         System.out.println("Please enter the name of the product: ");
         String productName = reader.next();
+        while (manager.productExists(seller, productName)) {
+            System.out.println("This product is already in the sellers list. Please choose another:");
+            productName = reader.next();
+        }
         System.out.println("Please enter the price of the product: ");
         float price = reader.nextFloat();
-        seller.addProduct(new Product(productName, price));
+        Category category = selectCategory();
+        System.out.println("Please enter the price of the package (if there is no special package enter 0):");
+        float packagePrice = reader.nextFloat();
+
+        seller.addProduct(new Product(productName, price, category, packagePrice));
+
     }
+
 
     private static void addProductBuyer() {
         Buyer buyer = chooseBuyer();
@@ -199,4 +215,26 @@ public class Main {
         return false;
     }
 
+    public static Category selectCategory() {
+        System.out.println("Select a category:");
+        for (Category category : Category.values()) {
+            System.out.println((category.ordinal() + 1) + ") " + category);
+        }
+        int categoryIndex = reader.nextInt();
+        while (categoryIndex < 1 || categoryIndex > 4) {
+            System.out.println("The input should be between 1-4, please select again:");
+            categoryIndex = reader.nextInt();
+        }
+        return Category.values()[categoryIndex - 1];
+    }
+
+    private static void printByCategory() {
+        Product[] products = manager.getItemsByCategory(selectCategory());
+        for (int i = 1; i < products.length + 1; i++) {
+            System.out.println(i + ") " + products[i - 1].getName());
+        }
+    }
 }
+
+
+
