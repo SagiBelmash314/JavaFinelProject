@@ -106,6 +106,7 @@ public class Main {
             if (!manager.isExisting(name)) {
                 break;
             }
+
             System.out.println("Buyer is already in the system.\n" +
                     "Please enter a different buyer or enter \".\" to return to the main menu:");
         } while (true);
