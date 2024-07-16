@@ -2,6 +2,7 @@
 // Yair Vinshststocks 214616781
 // Instructor: Pini Shlomi
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -33,8 +34,8 @@ public class Main {
 
         menu();
     }
-    public static void menu() {
-        int input;
+    public static void menu() throws InputMismatchException{
+        int input = 0;
 
         do {
             System.out.println();
@@ -51,7 +52,17 @@ public class Main {
                     8: Show every product of a specific category
                     9: Create new cart for buyer from previous cart
                     """);
-            input = reader.nextInt();
+            boolean acceptableAnswer = false;
+            while (!acceptableAnswer) {
+                try {
+                    input = reader.nextInt();
+                    acceptableAnswer = true;
+                }
+                catch (InputMismatchException e) {
+                    System.out.println("Input must be an integer, please enter an answer with the correct type:");
+                    reader.nextLine();
+                }
+            }
             switch (input) {
                 case 0:
                     System.out.println("Goodbye!");
@@ -128,14 +139,23 @@ public class Main {
         System.out.println("Please enter buyer's street name: ");
         String street = reader.next();
         System.out.println("Please enter buyer's building number: ");
-        int building = reader.nextInt();
-        System.out.println("Please enter buyer's city: ");
-        String city = reader.next();
-        System.out.println("Please enter buyer's country: ");
-        String country = reader.next();
-        manager.addBuyer(new Buyer(name, password, new Address(street, building, city, country)));
-        System.out.println(name + " got added to the system as a buyer.");
-        manager.sort();
+        boolean acceptableAnswer = false;
+        while (!acceptableAnswer) {
+            try {
+                int building = reader.nextInt();
+                System.out.println("Please enter buyer's city: ");
+                acceptableAnswer = true;
+                String city = reader.next();
+                System.out.println("Please enter buyer's country: ");
+                String country = reader.next();
+                manager.addBuyer(new Buyer(name, password, new Address(street, building, city, country)));
+                System.out.println(name + " got added to the system as a buyer.");
+                manager.sort();
+            } catch (InputMismatchException e) {
+                System.out.println("Input must be an integer, please enter an answer with the correct type:");
+                reader.nextLine();
+            }
+        }
     }
 
     private static void addProductToSeller() {
@@ -147,13 +167,31 @@ public class Main {
             productName = reader.next();
         }
         System.out.println("Please enter the price of the product: ");
-        float price = reader.nextFloat();
+        boolean acceptableAnswer = false;
+        float price = 0;
+        while (!acceptableAnswer) {
+            try {
+                price = reader.nextFloat();
+                acceptableAnswer = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Input must be a number, please enter an answer with the correct type:");
+                reader.nextLine();
+            }
+        }
         Category category = selectCategory();
         System.out.println("Please enter the price of the package (if there is no special package enter 0):");
-        float packagePrice = reader.nextFloat();
-
-        seller.addProduct(new Product(productName, price, category, packagePrice));
-        manager.sort();
+        acceptableAnswer = false;
+        while (!acceptableAnswer) {
+            try {
+                float packagePrice = reader.nextFloat();
+                seller.addProduct(new Product(productName, price, category, packagePrice));
+                manager.sort();
+                acceptableAnswer = true;
+            } catch (InputMismatchException e) {
+                System.out.println("Input must be a number, please enter an answer with the correct type:");
+                reader.nextLine();
+            }
+        }
     }
 
 
@@ -180,7 +218,7 @@ public class Main {
 
     private static void orderPayment() {
         Buyer buyer = chooseBuyer();
-        buyer.checkout();
+        buyer.purchase();
     }
 
     private static void printBuyers() {
@@ -235,10 +273,21 @@ public class Main {
         for (Category category : Category.values()) {
             System.out.println((category.ordinal() + 1) + ") " + category);
         }
-        int categoryIndex = reader.nextInt();
-        while (categoryIndex < 1 || categoryIndex > 4) {
-            System.out.println("The input should be between 1-4, please select again:");
-            categoryIndex = reader.nextInt();
+        int categoryIndex = 0;
+        boolean acceptableAnswer = false;
+        while (!acceptableAnswer) {
+            try {
+                categoryIndex = reader.nextInt();
+                while (categoryIndex < 1 || categoryIndex > 4) {
+                    System.out.println("The input should be between 1-4, please select again:");
+                    categoryIndex = reader.nextInt();
+                }
+                acceptableAnswer = true;
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Input must be an integer, please enter an answer with the correct type:");
+                reader.nextLine();
+            }
         }
         return Category.values()[categoryIndex - 1];
     }
@@ -251,7 +300,20 @@ public class Main {
     }
 
     private static void createCartFromHistory() {
-        Buyer buyer = chooseBuyer();
+        Buyer buyer;
+        buyer = chooseBuyer();
+        while (!buyer.hasPrevOrders()) {
+            System.out.println("This buyer doesn't have previous orders, do you want to choose another buyer? (Y/N)");
+            String answer = reader.next();
+            while (!answer.equals("Y") && !answer.equals("N")) {
+                System.out.println("Please enter \"Y\" or \"N\":");
+                answer = reader.next();
+            }
+            if (answer.equals("N")) {
+                return;
+            }
+            buyer = chooseBuyer();
+        }
         if (!buyer.getShoppingCart().isEmpty()) {
             System.out.println("The selected buyer already has a cart, do you wish to replace it with a previous order? (Y/N)");
             String answer = reader.next();
@@ -259,19 +321,32 @@ public class Main {
                 System.out.println("Please enter \"Y\" or \"N\":");
                 answer = reader.next();
             }
-            if (answer.equals("N")) { return; }
+            if (answer.equals("N")) {
+                return;
+            }
         }
         int numOfOrders = buyer.printOrderHistory();
         System.out.println("Please select an order to be the buyer's new cart, if you wish to cancel enter \"0\":");
-        int orderNum = reader.nextInt();
-        if (orderNum == 0) { return; }
-        while (orderNum < 1 || orderNum > numOfOrders) {
-            System.out.println("This option is not available, please choose from the option above:");
-            orderNum = reader.nextInt();
-            if (orderNum == 0) { return; }
+        boolean acceptableAnswer = false;
+        while (!acceptableAnswer) {
+            try {
+                int orderNum = reader.nextInt();
+                while (orderNum < 0 || orderNum > numOfOrders) {
+                    System.out.println("This option is not available, please choose from the options above:");
+                    orderNum = reader.nextInt();
+                }
+                if (orderNum == 0) {
+                    return;
+                }
+                buyer.setCart(buyer.getPrevOrder(orderNum - 1));
+                System.out.println("Buyer's cart has been updated");
+                acceptableAnswer = true;
+            }
+            catch (InputMismatchException e) {
+                System.out.println("Input must be an integer, please enter an answer with the correct type:");
+                reader.nextLine();
+            }
         }
-        buyer.setCart(buyer.getPrevOrder(orderNum - 1));
-        System.out.println("Buyer's cart has been updated");
     }
 }
 

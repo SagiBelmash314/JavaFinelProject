@@ -33,12 +33,20 @@ public class Buyer implements Comparable<Buyer> {
         shoppingCart.addProduct(product);
     }
 
-    public void checkout() {
-        System.out.println("Total price: " + shoppingCart.getTotal() + "ILS");
-        shoppingCart.setDate();
-        expandList();
-        orders[numOfOrders++] = shoppingCart;
-        shoppingCart = new ShoppingCart(this);
+    public void purchase() {
+        try {
+            if (shoppingCart.getProducts().length == 0) {
+                throw new EmptyCartException();
+            }
+            System.out.println("Total price: " + shoppingCart.getTotal() + "ILS");
+            shoppingCart.setDate();
+            expandList();
+            orders[numOfOrders++] = shoppingCart;
+            shoppingCart = new ShoppingCart(this);
+        }
+        catch (EmptyCartException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void expandList() {
@@ -69,6 +77,11 @@ public class Buyer implements Comparable<Buyer> {
     public int compareTo(Buyer o) {
         return name.compareTo(o.name);
     }
+
+    public boolean hasPrevOrders() {
+        return numOfOrders > 0;
+    }
+
 
     @Override
      public String toString() {
