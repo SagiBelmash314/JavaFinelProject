@@ -86,6 +86,14 @@ public class Manager {
         }
     }
 
+    public boolean areThereBuyers() {
+        return numOfBuyers > 0;
+    }
+
+    public boolean areThereSellers() {
+        return numOfSellers > 0;
+    }
+
     public void expandSellers(){
         if (sellers.length == 0) {
             sellers = new Seller[1];

@@ -159,6 +159,10 @@ public class Main {
     }
 
     private static void addProductToSeller() {
+        if (!manager.areThereSellers()) {
+            System.out.println("There are no sellers yet.");
+            return;
+        }
         Seller seller = chooseSeller();
         System.out.println("Please enter the name of the product: ");
         String productName = reader.next();
@@ -196,6 +200,14 @@ public class Main {
 
 
     private static void addProductBuyer() {
+        if (!manager.areThereBuyers()) {
+            System.out.println("There are no buyers yet.");
+            return;
+        }
+        if (!manager.areThereSellers()) {
+            System.out.println("There are no sellers yet, so there are no products to choose from.");
+            return;
+        }
         Buyer buyer = chooseBuyer();
         Seller seller = chooseSeller();
         seller.printProducts();
@@ -217,6 +229,10 @@ public class Main {
     }
 
     private static void orderPayment() {
+        if (!manager.areThereBuyers()) {
+            System.out.println("There are no buyers yet.");
+            return;
+        }
         Buyer buyer = chooseBuyer();
         buyer.purchase();
     }
@@ -300,8 +316,11 @@ public class Main {
     }
 
     private static void createCartFromHistory() {
-        Buyer buyer;
-        buyer = chooseBuyer();
+        if (!manager.areThereBuyers()) {
+            System.out.println("There are no buyers yet.");
+            return;
+        }
+        Buyer buyer = chooseBuyer();
         while (!buyer.hasPrevOrders()) {
             System.out.println("This buyer doesn't have previous orders, do you want to choose another buyer? (Y/N)");
             String answer = reader.next();
