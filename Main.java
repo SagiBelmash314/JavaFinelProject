@@ -22,16 +22,6 @@ public class Main {
         reader = new Scanner(System.in);
         manager = new Manager();
 
-//        TESTING
-        manager.addBuyer(new Buyer("Bob", "123", new Address("Here", 1, "There", "Somewhere")));
-        manager.addSeller(new Seller("Sagi", "123"));
-        manager.addSeller(new Seller("Yair", "123"));
-        manager.getSeller("Sagi").addProduct(new Product("Soap", 10, Category.ELECTRIC, 25));
-        manager.getSeller("Yair").addProduct(new Product("Shampoo", 5, Category.CHILD, 0));
-        manager.getBuyer("Bob").addItemToCart(manager.getSeller("Sagi").getProductByName("Soap"));
-
-//        END OF TESTING
-
         menu();
     }
     public static void menu() throws InputMismatchException{
