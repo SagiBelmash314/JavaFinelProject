@@ -17,7 +17,7 @@ public class Seller implements Comparable<Seller> {
     }
 
     public Product[] getProducts() {
-        return Arrays.copyOf(products, products.length);
+        return Arrays.copyOf(products, numOfProducts);
     }
 
     public Product getProductByName(String name) {
